@@ -2,8 +2,6 @@
 
 A desktop companion for coders that monitors posture changes and screen proximity using a webcam. When a warning persists, the app plays an audio reminder.
 
-Built for a 24-hour hackathon with Python, MediaPipe, OpenCV, and PySide6.
-
 ## Features
 
 - **Posture monitoring:** detects changes in head tilt, shoulder tilt, and head position compared with a calibrated baseline.
