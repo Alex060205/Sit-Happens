@@ -1,5 +1,6 @@
-from PySide6.QtWidgets import QVBoxLayout, QPushButton, QLabel, QCheckBox
+from PySide6.QtWidgets import QVBoxLayout, QPushButton, QLabel, QCheckBox, QSlider
 from PySide6.QtCore import Qt
+
 from ui.base import BasePanel
 
 class SettingsPanel(BasePanel):
@@ -29,6 +30,15 @@ class SettingsPanel(BasePanel):
         self.calibrate_button.clicked.connect(self._settings.request_calibration)
         self._layout.addWidget(self.calibrate_button)
         
+        self.alarm_delay_label = QLabel()
+        self.alarm_delay_slider = QSlider(Qt.Orientation.Horizontal)
+        self.alarm_delay_slider.setRange(1, 30)  # seconds
+        self._sync_alarm_delay(self._settings.alarm_delay())
+        self.alarm_delay_slider.valueChanged.connect(self._settings.set_alarm_delay)
+        self._settings.alarm_delay_changed.connect(self._sync_alarm_delay)
+        self._layout.addWidget(self.alarm_delay_label)
+        self._layout.addWidget(self.alarm_delay_slider)
+        
         self.setLayout(self._layout)
         
         self.setGeometry(1000, 0, 500, 500)
@@ -36,5 +46,9 @@ class SettingsPanel(BasePanel):
     def _sync_overlay_button(self, enabled: bool) -> None:
         self.overlay_button.setChecked(enabled)
         self.overlay_button.setText("Overlay: On" if enabled else "Overlay: Off")
+        
+    def _sync_alarm_delay(self, seconds: float) -> None:
+        self.alarm_delay_slider.setValue(int(seconds))
+        self.alarm_delay_label.setText(f"Alarm delay: {int(seconds)}s")
         
         
