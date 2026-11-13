@@ -4,7 +4,6 @@ import numpy as np
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-import winsound
 import time
 from alarmManager import AlarmManager
 
@@ -114,6 +113,23 @@ class DistanceDetector:
         self.detector.close()
 
 
+# OLD CODE
+'''
+SOUND_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "alarm-blare.wav")
+
+def play_alarm():
+    pass
+    #if os.path.exists(SOUND_PATH):
+        # SND_FILENAME loads from disk; SND_ASYNC prevents freezing the webcam loop
+        # want to loop every time the the audio ends
+        #winsound.PlaySound(SOUND_PATH, winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
+
+def stop_alarm():
+    pass
+    #winsound.PlaySound(None, winsound.SND_PURGE)
+
+
+# --- Standalone test runner for Person 2 (ignored when imported by Person 3) ---
 if __name__ == "__main__":
     ALARM_DELAY = 5.0
 
@@ -207,3 +223,4 @@ if __name__ == "__main__":
     distance_detector.close()
     cap.release()
     cv2.destroyAllWindows()
+'''

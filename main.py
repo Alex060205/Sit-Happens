@@ -1,3 +1,6 @@
+if __name__ == "__main__":
+    from ui.app import main as run
+    run()
 import time
 import cv2
 from camera import Camera
