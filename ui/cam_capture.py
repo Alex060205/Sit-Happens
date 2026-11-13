@@ -72,7 +72,7 @@ class CamCaptureWorker(QThread):
                     posture_start = None
 
                 elif not posture["calibrated"]:
-                    posture_label = "Posture: press C to calibrate"
+                    posture_label = "Posture: press Calibrate"
                     posture_start = None
 
                 elif posture["changed"] is True:
@@ -99,7 +99,7 @@ class CamCaptureWorker(QThread):
                     distance_start = None
 
                 elif not distance["calibrated"]:
-                    distance_label = "Distance: press C to calibrate"
+                    distance_label = "Distance: press Calibrate"
                     distance_start = None
 
                 elif distance["too_close"]:

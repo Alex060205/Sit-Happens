@@ -3,15 +3,16 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from ui.base import BasePanel
 from ui.cam_capture import CamCaptureWorker
-from alarm import Alarm
+from alarmManager import AlarmManager
 
 class CamPanel(BasePanel):
-    def __init__(self, parent, settings):
+    def __init__(self, parent, settings, alarm_manager):
         super().__init__(parent)
         self._settings = settings
+        self._alarm_manager = alarm_manager
         
         self._worker = None
-        self._alarm = Alarm(self)
+        #self._alarm = Alarm(self)
 
         self.title_label = QLabel("CAMERA")
         self.image_label = QLabel()
@@ -48,7 +49,7 @@ class CamPanel(BasePanel):
         )
         self.image_label.setPixmap(pixmap)
         
-    DISPLAY_SCALE = 0.5
+    DISPLAY_SCALE = 1.25
 
     def _on_resolution(self, width: int, height: int) -> None:
         self.image_label.setFixedSize(int(width * self.DISPLAY_SCALE), int(height * self.DISPLAY_SCALE))
