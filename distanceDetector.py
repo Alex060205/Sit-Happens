@@ -6,6 +6,7 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import winsound
 import time
+from alarmManager import AlarmManager
 
 
 class DistanceDetector:
@@ -113,33 +114,17 @@ class DistanceDetector:
         self.detector.close()
 
 
-SOUND_PATH = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "sound-files",
-    "alarm-blare.wav",
-)
-def play_alarm():
-    if os.path.exists(SOUND_PATH):
-        # SND_FILENAME loads from disk; SND_ASYNC prevents freezing the webcam loop
-        # want to loop every time the the audio ends
-        winsound.PlaySound(SOUND_PATH, winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
-
-def stop_alarm():
-    winsound.PlaySound(None, winsound.SND_PURGE)
-
-
-# --- Standalone test runner for Person 2 (ignored when imported by Person 3) ---
 if __name__ == "__main__":
     ALARM_DELAY = 5.0
 
     cap = cv2.VideoCapture(0)
     distance_detector = DistanceDetector(proximity_threshold=0.80)
+    sound_manager = AlarmManager(default_sound="sound-files/alarm-blare.wav", loop=True)
 
     too_close_start = None
-    alarm_trigger = False
 
     print("=== Screen Proximity Module Test ===")
-    print("Press 'c' to calibrate normal sitting distance, 'q' to quit.")
+    print("Press 'C' to calibrate | 'S' to select custom sound | 'Q' to quit")
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -150,10 +135,14 @@ if __name__ == "__main__":
         result = distance_detector.analyze(frame)
 
         if not result["tracking_succeeded"]:
+            sound_manager.stop()
+            too_close_start = None
             label = "Face not detected"
             color = (0, 165, 255)
 
         elif not result["calibrated"]:
+            sound_manager.stop()
+            too_close_start = None
             label = "Press 'C' to calibrate distance"
             color = (0, 220, 255)
 
@@ -166,25 +155,21 @@ if __name__ == "__main__":
 
             if elapsed >= ALARM_DELAY:
                 label = f"TOO CLOSE! ({pct}%) - ALARM TRIGGERED"
-                color = (0, 0, 255)  # Red
-                if not alarm_trigger:
-                    print("[ALARM] User too close for too long! Playing sound...")
-                    play_alarm()
-                    alarm_trigger = True
+                color = (0, 0, 255)
+                sound_manager.play()  # Safe to call every frame; SoundManager handles state
             else:
                 remaining = ALARM_DELAY - elapsed
                 label = f"Too close ({pct}%) - Alarm in {remaining:.1f}s"
-                color = (0, 140, 255)  # Orange warning during countdown
+                color = (0, 140, 255)
 
         else:
-            if alarm_trigger: 
-                stop_alarm()
+            sound_manager.stop()
             too_close_start = None
-            alarm_trigger = False
             pct = int(result["relative_distance"] * 100)
             label = f"GOOD DISTANCE ({pct}%)"
-            color = (0, 220, 0)  # Green
+            color = (0, 220, 0)
 
+        # Draw eye line & status text
         if result["eye_points"]:
             p1, p2 = result["eye_points"]
             cv2.line(frame, p1, p2, color, 2)
@@ -192,18 +177,33 @@ if __name__ == "__main__":
             cv2.circle(frame, p2, 4, color, -1)
 
         cv2.putText(frame, label, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.85, color, 2)
+        """
+        cv2.putText(
+            frame,
+            f"Sound: {sound_manager.get_current_sound_name()} (Press 'S' to change)",
+            (20, 75),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.55,
+            (220, 220, 220),
+            1,
+        )
+        """
         cv2.imshow("Person 2 - Screen Proximity Test", frame)
 
         key = cv2.waitKey(1) & 0xFF
-        
         if key in (ord("q"), ord("Q")):
             break
         elif key in (ord("c"), ord("C")):
             if distance_detector.calibrate(frame):
+                sound_manager.stop()
+                too_close_start = None
                 print("[CALIBRATED] Baseline eye distance saved.")
-            else:
-                print("[WARNING] No face detected during calibration.")
+        elif key in (ord("s"), ord("S")):
+            chosen = sound_manager.select_custom_sound()
+            if chosen:
+                print(f"[SOUND CHANGED] Now using: {chosen}")
 
+    sound_manager.stop()
     distance_detector.close()
     cap.release()
     cv2.destroyAllWindows()
