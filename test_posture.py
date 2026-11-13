@@ -1,6 +1,6 @@
 import cv2
 from camera import Camera
-from posture_detector import PostureDetector
+from slouching_detector_ import SlouchingDetector
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
             print("Close other apps that are using the camera.")
             return
 
-        detector = PostureDetector()
+        detector = SlouchingDetector()
 
         print("C: calibrate posture")
         print("Q: quit")

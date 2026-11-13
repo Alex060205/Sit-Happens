@@ -4,7 +4,7 @@ import cv2
 import mediapipe as mp
 
 
-class PostureDetector:
+class SlouchingDetector:
     def __init__(self):
         model_path = (
             Path(__file__).resolve().parent
