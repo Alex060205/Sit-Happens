@@ -2,8 +2,6 @@ from pathlib import Path
 import math
 import cv2
 import mediapipe as mp
-import time
-import winsound
 from pathlib import Path
 
 
@@ -17,7 +15,7 @@ class SlouchingDetector:
 
         if not model_path.is_file():
             raise FileNotFoundError(
-                f"No se encontro el modelo: {model_path}"
+                f"Model was not found: {model_path}"
             )
 
         options = mp.tasks.vision.PoseLandmarkerOptions(
