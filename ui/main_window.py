@@ -18,5 +18,9 @@ class MainWindow(QMainWindow):
         
         self.cam_panel = CamPanel(canvas, self.settings)
         self.settings_panel = SettingsPanel(canvas, self.settings)
+
+        def closeEvent(self, event) -> None:
+            self.cam_panel.shutdown()
+            super().closeEvent(event)
         
         
