@@ -113,8 +113,11 @@ class DistanceDetector:
         self.detector.close()
 
 
-SOUND_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "alarm-blare.wav")
-
+SOUND_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "sound-files",
+    "alarm-blare.wav",
+)
 def play_alarm():
     if os.path.exists(SOUND_PATH):
         # SND_FILENAME loads from disk; SND_ASYNC prevents freezing the webcam loop
