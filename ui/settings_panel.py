@@ -15,7 +15,7 @@ class SettingsPanel(BasePanel):
         self._layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self._layout.addWidget(self.title_label)
 
-        self.overlay_button = QPushButton()
+        self.overlay_button = QPushButton("Click to enable tracking")
         self.overlay_button.setCheckable(True)
         self.overlay_button.setChecked(self._settings.overlay_enabled())
         self.overlay_button.toggled.connect(self._settings.set_overlay_enabled)
