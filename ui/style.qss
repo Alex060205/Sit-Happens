@@ -1,0 +1,78 @@
+QMainWindow {
+    background-color: #0a0e14;
+}
+
+QWidget {
+    background-color: #0a0e14;
+    color: #7fdbff;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 11pt;
+}
+
+QTextEdit {
+    background-color: #0a0e14;
+    color: #7fdbff;
+    border: 1px solid #1a8fa3;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+QLineEdit {
+    background-color: #0d1520;
+    color: #00e5ff;
+    border: 1px solid #1a8fa3;
+    border-radius: 4px;
+    padding: 6px;
+    selection-background-color: #00e5ff;
+    selection-color: #0a0e14;
+}
+
+QLineEdit:disabled {
+    color: #3d5a66;
+    border: 1px solid #1a3a42;
+}
+
+QPushButton {
+    background-color: #10202a;
+    color: #00e5ff;
+    border: 1px solid #00e5ff;
+    border-radius: 4px;
+    padding: 6px 16px;
+}
+
+QPushButton:hover {
+    background-color: #143240;
+    border: 1px solid #7fffff;
+}
+
+QPushButton:pressed {
+    background-color: #00e5ff;
+    color: #0a0e14;
+}
+
+QPushButton:disabled {
+    color: #3d5a66;
+    border: 1px solid #1a3a42;
+    background-color: #0a0e14;
+}
+
+QPushButton:pressed {
+    color: #00e5ff;
+    font-style: italic;
+}
+
+QWidget#dashboard_panel2 {
+    background-color: #0d1520;
+    border: 1px solid #1a8fa3;
+    border-radius: 6px;
+}
+
+QWidget#dashboard_panel {
+    background-color: #0d1520;
+}
+
+QLabel#panel_title {
+    font-weight: bold;
+    color: #00e5ff;
+    font-size: 12pt;
+}
