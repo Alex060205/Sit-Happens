@@ -5,11 +5,13 @@ from PySide6.QtMultimedia import QSoundEffect
 SOUND_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sound-files/alarm-blare.wav")
 
 class Alarm(QObject):
-    def __init__(self, parent=None):
+    def __init__(self, settings, parent=None):
         super().__init__(parent)
         self._effect = QSoundEffect(self)
         self._effect.setSource(QUrl.fromLocalFile(SOUND_PATH))
         self._effect.setLoopCount(QSoundEffect.Loop.Infinite.value)
+        self._effect.setVolume(settings.volume())
+        settings.volume_changed.connect(self._effect.setVolume)
         
     def set_active(self, active: bool) -> None:
         if active:

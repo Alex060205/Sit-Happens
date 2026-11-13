@@ -8,13 +8,14 @@ class SettingsPanel(BasePanel):
         super().__init__(parent)
         self._settings = settings
         
+        # Panel title
         self.title_label = QLabel("SETTINGS")
         self.title_label.setObjectName("panel_title")
-         
         self._layout = QVBoxLayout()
         self._layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self._layout.addWidget(self.title_label)
 
+        # Button to toggle overlay
         self.overlay_button = QPushButton()
         self.overlay_button.setCheckable(True)
         self.overlay_button.setChecked(self._settings.overlay_enabled())
@@ -22,14 +23,17 @@ class SettingsPanel(BasePanel):
         self._settings.overlay_changed.connect(self._sync_overlay_button)
         self._layout.addWidget(self.overlay_button)
         
+        # Button to exit app
         self.exit_button = QPushButton("Exit")
         self.exit_button.clicked.connect(lambda: self.window().close())
         self._layout.addWidget(self.exit_button)
         
+        # Button to calibrate both distance and posture detection
         self.calibrate_button = QPushButton("Calibrate")
         self.calibrate_button.clicked.connect(self._settings.request_calibration)
         self._layout.addWidget(self.calibrate_button)
         
+        # Slider to adjust alarm delay
         self.alarm_delay_label = QLabel()
         self.alarm_delay_slider = QSlider(Qt.Orientation.Horizontal)
         self.alarm_delay_slider.setRange(1, 30)  # seconds
@@ -39,6 +43,17 @@ class SettingsPanel(BasePanel):
         self._layout.addWidget(self.alarm_delay_label)
         self._layout.addWidget(self.alarm_delay_slider)
         
+        # Slider to adjust volume
+        self.volume_label = QLabel()
+        self.volume_slider = QSlider(Qt.Orientation.Horizontal)
+        self.volume_slider.setRange(0, 100)
+        self._sync_volume(self._settings.volume())
+        self.volume_slider.valueChanged.connect(lambda v: self._settings.set_volume(v / 100))
+        self._settings.volume_changed.connect(self._sync_volume)
+        self._layout.addWidget(self.volume_label)
+        self._layout.addWidget(self.volume_slider)
+        
+        #
         self.setLayout(self._layout)
         
     def _sync_overlay_button(self, enabled: bool) -> None:
@@ -48,5 +63,9 @@ class SettingsPanel(BasePanel):
     def _sync_alarm_delay(self, seconds: float) -> None:
         self.alarm_delay_slider.setValue(int(seconds))
         self.alarm_delay_label.setText(f"Alarm delay: {int(seconds)}s")
+        
+    def _sync_volume(self, volume: float) -> None:
+        self.volume_slider.setValue(round(volume * 100))
+        self.volume_label.setText(f"Volume: {round(volume*100)}%")
         
         
