@@ -1,3 +1,3 @@
 # Sit-Happens
 
-# Next Hacked Beta Winners 2026!!
+- Next Hacked Beta Winners 2026!!
