@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QVBoxLayout, QLabel
+from PySide6.QtWidgets import QVBoxLayout, QLabel, QSizePolicy
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from ui.base import BasePanel
@@ -18,9 +18,12 @@ class CamPanel(BasePanel):
         self.image_label.setScaledContents(False)
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
+        self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
+        
         layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addWidget(self.title_label)
-        layout.addWidget(self.image_label)
+        layout.addWidget(self.image_label, stretch=1)
         self.setLayout(layout)
         
     def showEvent(self, event) -> None:

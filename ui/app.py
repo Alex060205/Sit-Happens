@@ -12,6 +12,7 @@ def main():
     app.setStyleSheet(style_path.read_text())
  
     window = MainWindow()
+    window.resize(window.screen().availableGeometry().size() * 0.8)
     window.show()
     
     icon = app.style().standardIcon(QStyle.StandardPixmap.SP_ComputerIcon)

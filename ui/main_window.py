@@ -1,15 +1,15 @@
-from PySide6.QtWidgets import QMainWindow, QWidget
+from PySide6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
 
 from ui.dashboard_canvas import DashboardCanvas
 from ui.cam_panel import CamPanel
 from ui.settings_panel import SettingsPanel
 from app_settings import AppSettings
+from ui.aspect_box import AspectRatioBox
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Sit Happens")
-        self.resize(1920, 1080)
         
         canvas = DashboardCanvas(self)
         self.setCentralWidget(canvas)
@@ -19,4 +19,14 @@ class MainWindow(QMainWindow):
         self.cam_panel = CamPanel(canvas, self.settings)
         self.settings_panel = SettingsPanel(canvas, self.settings)
         
+        stage = QWidget()
+        stage_layout = QHBoxLayout(stage)
+        stage_layout.addWidget(self.cam_panel, stretch=3)
+        stage_layout.addWidget(self.settings_panel, stretch=1)
+
+        box = AspectRatioBox(stage, ratio=2.3)
+
+        canvas_layout = QHBoxLayout(canvas)
+        canvas_layout.setContentsMargins(0, 0, 0, 0)
+        canvas_layout.addWidget(box)
         

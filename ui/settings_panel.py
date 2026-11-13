@@ -41,8 +41,6 @@ class SettingsPanel(BasePanel):
         
         self.setLayout(self._layout)
         
-        self.setGeometry(1000, 0, 500, 500)
-        
     def _sync_overlay_button(self, enabled: bool) -> None:
         self.overlay_button.setChecked(enabled)
         self.overlay_button.setText("Overlay: On" if enabled else "Overlay: Off")
