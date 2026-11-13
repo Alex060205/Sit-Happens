@@ -1,11 +1,44 @@
 import cv2
 from camera import Camera
 from slouching_detector_ import SlouchingDetector
+import time
+import winsound
+from pathlib import Path
+
+
+SOUND_PATH = (
+    Path(__file__).resolve().parent
+    / "sound-files"
+    / "alarm-blare.wav"
+)
+
+ALARM_DELAY = 5.0
+
+
+def play_alarm():
+    if not SOUND_PATH.is_file():
+        raise FileNotFoundError(
+            f"Sound file not found: {SOUND_PATH}"
+        )
+
+    winsound.PlaySound(
+        str(SOUND_PATH),
+        winsound.SND_FILENAME
+        | winsound.SND_ASYNC
+        | winsound.SND_LOOP,
+    )
+
+
+def stop_alarm():
+    winsound.PlaySound(None, 0)
 
 
 def main():
     camera = Camera()
     detector = None
+
+    posture_change_start = None
+    alarm_playing = False
 
     try:
         if not camera.open():
@@ -27,6 +60,31 @@ def main():
                 break
 
             result = detector.analyze(frame)
+            # require valid tracking and calibration before warning
+            posture_changed = (
+                result["tracking"]
+                and result["calibrated"]
+                and result["changed"] is True
+            )
+
+            if posture_changed:
+                if posture_change_start is None:
+                    posture_change_start = time.monotonic()
+
+                elapsed = time.monotonic() - posture_change_start
+
+                if elapsed >= ALARM_DELAY and not alarm_playing:
+                    play_alarm()
+                    alarm_playing = True
+                    print("[ALARM] Posture change detected for 5 seconds.")
+
+            else:
+                # reset when posture returns or tracking is lost
+                posture_change_start = None
+
+                if alarm_playing:
+                    stop_alarm()
+                    alarm_playing = False
             display = frame.copy()
 
             if not result["tracking"]:
@@ -80,11 +138,11 @@ def main():
 
             key = cv2.waitKey(1) & 0xFF
 
-            if key in (ord("q"), ord("Q")):
-                break
-
             if key in (ord("c"), ord("C")):
                 if detector.calibrate(frame):
+                    stop_alarm()
+                    posture_change_start = None
+                    alarm_playing = False
                     print("Posture calibrated.")
                 else:
                     print(
@@ -99,6 +157,7 @@ def main():
                 break
 
     finally:
+        stop_alarm()
         camera.close()
 
         if detector is not None:
