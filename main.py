@@ -5,11 +5,30 @@ from slouching_detector_ import SlouchingDetector
 from distanceDetector import DistanceDetector, play_alarm, stop_alarm
 
 
-ALARM_DELAY = 5.0
 WINDOW_NAME = "Sit Happens"
 
+def choose_alarm_delay():
+    while True:
+        value = input(
+            "Choose alarm delay (0 = no delay, 1-10 = seconds): ").strip()
+
+        try:
+            delay = int(value)
+        except ValueError:
+            print("Please enter a whole number from 0 to 10.")
+            continue
+
+        if 0 <= delay <= 10:
+            return delay
+
+        print("Please enter a number from 0 to 10.")
 
 def main():
+    
+    alarm_delay = choose_alarm_delay()
+
+    print(f"Alarm delay set to {alarm_delay} seconds.")
+
     camera = Camera()
     posture_detector = None
     distance_detector = None
@@ -62,9 +81,9 @@ def main():
                     posture_start = now
 
                 elapsed = now - posture_start
-                remaining = max(0.0, ALARM_DELAY - elapsed)
+                remaining = max(0.0, alarm_delay - elapsed)
 
-                if elapsed >= ALARM_DELAY:
+                if elapsed >= alarm_delay:
                     posture_label = "Posture: change detected - ALARM"
                 else:
                     posture_label = (
@@ -89,10 +108,10 @@ def main():
                     distance_start = now
 
                 elapsed = now - distance_start
-                remaining = max(0.0, ALARM_DELAY - elapsed)
+                remaining = max(0.0, alarm_delay - elapsed)
                 percent = int(distance["relative_distance"] * 100)
 
-                if elapsed >= ALARM_DELAY:
+                if elapsed >= alarm_delay:
                     distance_label = (
                         f"Distance: too close ({percent}%) - ALARM"
                     )
@@ -110,12 +129,12 @@ def main():
             # either detector can request the shared alarm
             posture_alarm = (
                 posture_start is not None
-                and now - posture_start >= ALARM_DELAY
+                and now - posture_start >= alarm_delay
             )
 
             distance_alarm = (
                 distance_start is not None
-                and now - distance_start >= ALARM_DELAY
+                and now - distance_start >= alarm_delay
             )
 
             should_play = posture_alarm or distance_alarm
@@ -169,7 +188,7 @@ def main():
             )
 
             cv2.putText(
-                display, "C: calibrate | Q: quit", (15, 90),
+                display, f"C: calibrate | Q: quit  | Delay: {alarm_delay}s", (15, 90),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2,
             )
 
