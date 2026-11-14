@@ -7,6 +7,7 @@ class AppSettings(QObject):
     alarm_delay_changed = Signal(float)
     sound_changed = Signal(str)
     volume_changed = Signal(float)
+    scale_changed = Signal(float)
     
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -14,6 +15,7 @@ class AppSettings(QObject):
         self._alarm_delay = 5.0
         self._volume = 1.0
         self._sound_path = "sound-files/alarm-blare.wav"
+        self._scale = 1.0
     
     def overlay_enabled(self) -> bool:
         return self._overlay_enabled
@@ -50,7 +52,7 @@ class AppSettings(QObject):
         self.sound_changed.emit(path)
         
     def volume(self) -> float:
-        return self._alarm_delay
+        return self._volume
 
     def set_volume(self, volume: float) -> None:
         volume = float(volume)
@@ -58,3 +60,13 @@ class AppSettings(QObject):
             return
         self._volume = volume
         self.volume_changed.emit(volume)
+        
+    def scale(self) -> float:
+        return self._scale
+        
+    def set_scale(self, scale: float) -> None:
+        scale = float(scale)
+        if scale == self._scale:
+            return
+        self._scale = scale
+        self.scale_changed.emit(scale)
