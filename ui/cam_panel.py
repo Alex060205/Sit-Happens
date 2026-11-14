@@ -20,7 +20,7 @@ class CamPanel(BasePanel):
         
         layout = QVBoxLayout()
         layout.addWidget(self.title_label)
-        layout.addWidget(self.image_label)
+        layout.addWidget(self.image_label, stretch=1)
         self.setLayout(layout)
         
     def showEvent(self, event) -> None:
@@ -48,7 +48,7 @@ class CamPanel(BasePanel):
         )
         self.image_label.setPixmap(pixmap)
         
-    DISPLAY_SCALE = 0.5
+    DISPLAY_SCALE = 1.25
 
     def _on_resolution(self, width: int, height: int) -> None:
         self.image_label.setFixedSize(int(width * self.DISPLAY_SCALE), int(height * self.DISPLAY_SCALE))
