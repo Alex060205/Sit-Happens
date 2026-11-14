@@ -42,3 +42,17 @@ Clone the repo
 The overlay button only changes what appears on the preview. Turning the overlay off does not pause detection.
 
 Recalibrate after moving the camera or changing your desk setup.
+
+## Limitations
+
+Sit Happens detects changes from your calibrated position. It does not diagnose posture problems. Lighting, camera and body placement can affect tracking.
+
+## Credits
+
+### Team
+
+- **Alejandro Hernandez Garcia** 
+- **Teague Botterman** 
+- **Szymon Paraiso**
+
+All three of us contributed to testing, debugging and improving the application.
