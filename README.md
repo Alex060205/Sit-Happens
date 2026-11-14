@@ -1,6 +1,6 @@
 # Sit Happens
 
-A desktop companion for coders that monitors posture changes and screen proximity using a webcam. When a warning persists, the app plays an audio reminder.
+A desktop companion for coders that monitors posture changes and screen proximity using a webcam. When an alarm persists, the app plays an audio reminder.
 
 ## Features
 
