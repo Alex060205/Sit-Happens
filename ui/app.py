@@ -12,6 +12,7 @@ def main():
     app.setStyleSheet(style_path.read_text())
  
     window = MainWindow()
+    app.aboutToQuit.connect(window.cam_panel.shutdown)
     window.resize(window.screen().availableGeometry().size() * 0.8)
     window.show()
     

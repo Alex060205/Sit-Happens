@@ -33,12 +33,18 @@ class CamPanel(BasePanel):
                 self._worker.alarm_changed.connect(self._alarm.set_active)
                 self._worker.start()
                 
-    def hideEvent(self, event) -> None:
-        super().hideEvent(event)
+    def shutdown(self) -> None:
+        # release resources only when quitting the application
         if self._worker is not None:
+            self._worker.alarm_changed.disconnect(
+                self._alarm.set_active
+            )
             self._worker.stop()
             self._worker.wait()
+            self._worker.deleteLater()
             self._worker = None
+
+        self._alarm.set_active(False)
             
     def _on_frame(self, image) -> None:
         pixmap = QPixmap.fromImage(image).scaled(
