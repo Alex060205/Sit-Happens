@@ -6,7 +6,7 @@ A desktop companion for coders that monitors posture changes and screen proximit
 
 - **Posture monitoring:** detects changes in head tilt, shoulder tilt, and head position compared with a calibrated baseline.
 - **Screen proximity monitoring:** estimates whether the user has moved too close to the camera.
-- **Audio reminders:** plays an alarm when either warning persists for the selected delay.
+- **Audio reminders:** plays an alarm for the selected delay.
 - **Adjustable alarm delay:** choose between 1 and 30 seconds. The default is 5 seconds.
 - **Calibration:** set posture and distance baselines using the Calibrate button.
 - **Background monitoring:** continues monitoring when the window is minimized.
