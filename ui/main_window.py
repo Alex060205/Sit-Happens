@@ -27,10 +27,10 @@ class MainWindow(QMainWindow):
         
         stage = QWidget()
         stage_layout = QHBoxLayout(stage)
-        stage_layout.addWidget(self.cam_panel, stretch=2.5)
+        stage_layout.addWidget(self.cam_panel, stretch=3)
         stage_layout.addWidget(self.settings_panel, stretch=1)
 
-        box = AspectRatioBox(stage, ratio=1.5)
+        box = AspectRatioBox(stage, ratio=2.3)
 
         canvas_layout = QHBoxLayout(canvas)
         canvas_layout.setContentsMargins(0, 0, 0, 0)

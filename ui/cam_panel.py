@@ -48,7 +48,7 @@ class CamPanel(BasePanel):
         )
         self.image_label.setPixmap(pixmap)
         
-    DISPLAY_SCALE = 1.25
+    DISPLAY_SCALE = 1.50
 
     def _on_resolution(self, width: int, height: int) -> None:
         self.image_label.setFixedSize(int(width * self.DISPLAY_SCALE), int(height * self.DISPLAY_SCALE))
