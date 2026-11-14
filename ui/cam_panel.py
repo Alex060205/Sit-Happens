@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QVBoxLayout, QLabel
+from PySide6.QtWidgets import QVBoxLayout, QLabel, QSizePolicy
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from ui.base import BasePanel
@@ -16,7 +16,7 @@ class CamPanel(BasePanel):
         self.title_label = QLabel("CAMERA")
         self.image_label = QLabel()
         self.image_label.setScaledContents(False)
-        self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
         
         layout = QVBoxLayout()
         layout.addWidget(self.title_label)
@@ -52,7 +52,6 @@ class CamPanel(BasePanel):
 
     def _on_resolution(self, width: int, height: int) -> None:
         self.image_label.setFixedSize(int(width * self.DISPLAY_SCALE), int(height * self.DISPLAY_SCALE))
-        self.setFixedSize(self.sizeHint())
 
     def _on_error(self, message: str) -> None:
         self.title_label.setText(f"ERROR: {message}")
