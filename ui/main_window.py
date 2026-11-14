@@ -21,10 +21,6 @@ class MainWindow(QMainWindow):
         self.cam_panel = CamPanel(canvas, self.settings)
         self.settings_panel = SettingsPanel(canvas, self.settings)
         
-        def closeEvent(self, event) -> None:
-            self.cam_panel.shutdown()
-            super().closeEvent(event)
-        
         stage = QWidget()
         stage_layout = QHBoxLayout(stage)
         stage_layout.addWidget(self.cam_panel, stretch=3)
@@ -35,4 +31,8 @@ class MainWindow(QMainWindow):
         canvas_layout = QHBoxLayout(canvas)
         canvas_layout.setContentsMargins(0, 0, 0, 0)
         canvas_layout.addWidget(box)
+
+        def closeEvent(self, event) -> None:
+            self.cam_panel.shutdown()
+            super().closeEvent(event)
         

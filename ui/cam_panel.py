@@ -20,7 +20,7 @@ class CamPanel(BasePanel):
         
         layout = QVBoxLayout()
         layout.addWidget(self.title_label)
-        layout.addWidget(self.image_label)
+        layout.addWidget(self.image_label, stretch=1)
         self.setLayout(layout)
         
     def showEvent(self, event) -> None:
@@ -33,12 +33,18 @@ class CamPanel(BasePanel):
                 self._worker.alarm_changed.connect(self._alarm.set_active)
                 self._worker.start()
                 
-    def hideEvent(self, event) -> None:
-        super().hideEvent(event)
+    def shutdown(self) -> None:
+        # release resources only when quitting the application
         if self._worker is not None:
+            self._worker.alarm_changed.disconnect(
+                self._alarm.set_active
+            )
             self._worker.stop()
             self._worker.wait()
+            self._worker.deleteLater()
             self._worker = None
+
+        self._alarm.set_active(False)
             
     def _on_frame(self, image) -> None:
         pixmap = QPixmap.fromImage(image).scaled(
@@ -48,7 +54,7 @@ class CamPanel(BasePanel):
         )
         self.image_label.setPixmap(pixmap)
         
-    DISPLAY_SCALE = 0.5
+    DISPLAY_SCALE = 1.50
 
     def _on_resolution(self, width: int, height: int) -> None:
         self.image_label.setFixedSize(int(width * self.DISPLAY_SCALE), int(height * self.DISPLAY_SCALE))
