@@ -49,7 +49,18 @@ class SettingsPanel(BasePanel):
         self._settings.volume_changed.connect(self._sync_volume)
         self._layout.addWidget(self.volume_label)
         self._layout.addWidget(self.volume_slider)
+        
+        # Slider to adjust UI scale
+        self.scale_label = QLabel()
+        self.scale_slider = QSlider(Qt.Orientation.Horizontal)
+        self.scale_slider.setRange(25, 200)
+        self._sync_scale(self._settings.scale())
+        self.scale_slider.valueChanged.connect(lambda v: self._settings.set_scale(v / 100))
+        self._settings.scale_changed.connect(self._sync_scale)
+        self._layout.addWidget(self.scale_label)
+        self._layout.addWidget(self.scale_slider)
 
+        #
         self.sound_label = QLabel()
         self._sync_sound_label(self._settings.sound_path())
         self._settings.sound_changed.connect(self._sync_sound_label)
@@ -60,6 +71,7 @@ class SettingsPanel(BasePanel):
         presets = {
             "Coconut Mall": "sound-files/coconut-mall.wav",
             "Alarm": "sound-files/alarm-blare.wav",
+            "Jet2Holliday": "sound-files/jet2holliday.wav"
         }
         for label_text, file_path in presets.items():
             btn = QPushButton(label_text)
@@ -99,6 +111,10 @@ class SettingsPanel(BasePanel):
     def _sync_volume(self, volume: float) -> None:
         self.volume_slider.setValue(round(volume * 100))
         self.volume_label.setText(f"Volume: {round(volume*100)}%")
+    
+    def _sync_scale(self, scale: float) -> None:
+        self.scale_slider.setValue(round(scale * 100))
+        self.scale_label.setText(f"Camera Scale: {round(scale * 100)}")
 
     def _select_sound(self, path: str) -> None:
         self._settings.set_sound_path(path)

@@ -12,7 +12,7 @@ class CamPanel(BasePanel):
         
         self._worker = None
         self._alarm = Alarm(self._settings, self)
-
+    
         self.title_label = QLabel("CAMERA")
         self.image_label = QLabel()
         self.image_label.setScaledContents(False)
@@ -29,7 +29,6 @@ class CamPanel(BasePanel):
                 self._worker = CamCaptureWorker(self._settings)
                 self._worker.frame_ready.connect(self._on_frame)
                 self._worker.error.connect(self._on_error)
-                self._worker.resolution_ready.connect(self._on_resolution)
                 self._worker.alarm_changed.connect(self._alarm.set_active)
                 self._worker.start()
                 
@@ -47,6 +46,8 @@ class CamPanel(BasePanel):
         self._alarm.set_active(False)
             
     def _on_frame(self, image) -> None:
+        scale = self._settings.scale()
+        self.image_label.setFixedSize(int(image.width() * scale), int(image.height() * scale))
         pixmap = QPixmap.fromImage(image).scaled(
             self.image_label.size(),
             Qt.AspectRatioMode.KeepAspectRatio,
@@ -54,10 +55,6 @@ class CamPanel(BasePanel):
         )
         self.image_label.setPixmap(pixmap)
         
-    DISPLAY_SCALE = 1.50
-
-    def _on_resolution(self, width: int, height: int) -> None:
-        self.image_label.setFixedSize(int(width * self.DISPLAY_SCALE), int(height * self.DISPLAY_SCALE))
 
     def _on_error(self, message: str) -> None:
         self.title_label.setText(f"ERROR: {message}")
