@@ -23,12 +23,14 @@ A desktop companion for coders that monitors posture changes and screen proximit
 
 ## Requirements
 
+- Python 3.12
 - A webcam
 - Speakers or headphones
 - Camera access enabled
 
 ## How to Use
 
+Clone the repo
 1. Position the webcam so your face and both shoulders are visible.
 2. Sit comfortably and face the camera.
 3. Click **Calibrate** to save your posture and distance baselines.
